@@ -1,2 +1,5 @@
 venv/
 test/
+
+
+.DS_Store
