@@ -4,3 +4,10 @@ test/
 riemann_geometry.egg-info/
 
 .DS_Store
+.aux
+.log
+.out
+.toc
+.gz
+.synctex.gz
+.ipynb_checkpoints
