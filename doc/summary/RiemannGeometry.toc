@@ -1,0 +1,25 @@
+\contentsline {section}{\numberline {1}Riemann Geometry}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Convension}{1}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}Einstein Convension}{1}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Tensor denotion}{1}{subsubsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.2}Example for Manifolds in Euclidean \(\mathbb {R}^n\)}{1}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Flat Manifold in \(\mathbb {R}^2\)}{1}{subsubsection.1.2.1}%
+\contentsline {paragraph}{Cartesian coordinate}{1}{section*.2}%
+\contentsline {paragraph}{Polar coordinate}{1}{section*.3}%
+\contentsline {subsubsection}{\numberline {1.2.2}Flat Manifold in \(\mathbb {R}^3\)}{2}{subsubsection.1.2.2}%
+\contentsline {paragraph}{Cartesian coordinate}{2}{section*.4}%
+\contentsline {paragraph}{Spherical coordinate}{2}{section*.5}%
+\contentsline {paragraph}{Cylindrical coordinate}{2}{section*.6}%
+\contentsline {subsubsection}{\numberline {1.2.3}Curved Manifolds}{2}{subsubsection.1.2.3}%
+\contentsline {paragraph}{Sphere \(S^2\)}{2}{section*.7}%
+\contentsline {paragraph}{Torus \(T^2\)}{3}{section*.8}%
+\contentsline {subsection}{\numberline {1.3}Example for Manifolds in Spacetime \(\mathbb {R}^{n+1}\)}{3}{subsection.1.3}%
+\contentsline {subsubsection}{\numberline {1.3.1}Flat Manifolds in \(\mathbb {R}^{3+1}\)}{3}{subsubsection.1.3.1}%
+\contentsline {paragraph}{Cartesian coordinate}{3}{section*.9}%
+\contentsline {paragraph}{Spheical coordinate}{3}{section*.10}%
+\contentsline {subsubsection}{\numberline {1.3.2}Curved manifolds in \(\mathbb {R}^{3+1}\)}{4}{subsubsection.1.3.2}%
+\contentsline {paragraph}{Schwarzschild}{4}{section*.11}%
+\contentsline {paragraph}{Kerr}{4}{section*.12}%
+\contentsline {paragraph}{Reissner-Nordström}{4}{section*.13}%
+\contentsline {paragraph}{Weak-Field}{5}{section*.14}%
+\contentsline {paragraph}{Friedmann--Lemaître--Robertson--Walker}{6}{section*.15}%

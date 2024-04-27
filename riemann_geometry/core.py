@@ -70,6 +70,13 @@ class RiemannGeometry:
         self.coordinate = x
         self.metric = self.g
         self.metric_inv = self.g_inv
+
+    def simplify(self, x): 
+        x = sympy.expand_trig(x)
+        x = sympy.trigsimp(x, method='fu')
+        x = sympy.simplify(x)
+        x = sympy.expand_trig(x)
+        return x
         
     def calculate(self, progress=True):
         """
@@ -105,14 +112,14 @@ class RiemannGeometry:
 
     
     def calculate_with_progress(self):
-    
+        print("Calculating ...")
         self.Christoffel_symbols = []
-        for a in tqdm(range(self.n), desc="Calculating Christoffel Symbols"):
+        for a in tqdm(range(self.n), desc="Christoffel Symbols ", ncols=92):
             _Christoffel = self.function_to_sympyMatrix(lambda b,c: self.calculate_Christoffel(a, b, c))
             self.Christoffel_symbols.append(_Christoffel)
     
         self.Riemann_tensor = []
-        for a in tqdm(range(self.n), desc="Calculating Riemann Tensor"):
+        for a in tqdm(range(self.n), desc="Riemann Tensor      ", ncols=92):
             _Riemann_row = []
             for b in range(self.n):
                 _Riemann = self.function_to_sympyMatrix(lambda c, d: self.calculate_Reimann(a, b, c, d))
@@ -120,7 +127,7 @@ class RiemannGeometry:
             self.Riemann_tensor.append(_Riemann_row)
     
         self.Ricci_tensor = []
-        for a in tqdm(range(self.n), desc="Calculating Ricci Tensor"):
+        for a in tqdm(range(self.n), desc="Ricci Tensor        ", ncols=92):
             _Ricci_row = []
             for b in range(self.n):
                 _Ricci = self.calculate_Ricci_tensor(a, b)
@@ -129,10 +136,10 @@ class RiemannGeometry:
         self.Ricci_tensor = sympy.Matrix(self.Ricci_tensor)
     
         self.Ricci_scalar = 0
-        for a in tqdm(range(self.n), desc="Calculating Ricci Scalar"):
+        for a in tqdm(range(self.n), desc="Ricci Scalar        ", ncols=92):
             for b in range(self.n):
                 self.Ricci_scalar += self.g_inv[a, b] * self.get_Ricci_tensor(a, b)
-    
+        self.Ricci_scalar = self.simplify(self.Ricci_scalar)
         self.calculated = True
         
     def calculate_without_progress(self):
@@ -190,27 +197,28 @@ class RiemannGeometry:
     def calculate_Christoffel(self, a, b, c):
         Gamma = 0
         for d in range(self.n):
-            Gamma += self.g_inv[a,d] * (g[d,c].diff(x[b]) + g[d,b].diff(x[c]) - g[b,c].diff(x[d]))
-        return Gamma/2
+            Gamma += self.g_inv[a,d] * (self.g[d,c].diff(self.x[b]) + self.g[d,b].diff(self.x[c]) - self.g[b,c].diff(self.x[d]))
+        return self.simplify(Gamma/2)
+
     
     def calculate_Reimann(self, a, b, c, d):
-        R = self.get_Christoffel(a,b,d).diff(x[c]) - self.get_Christoffel(a,b,c).diff(x[d])
+        R = self.get_Christoffel(a,b,d).diff(self.x[c]) - self.get_Christoffel(a,b,c).diff(self.x[d])
         for e in range(self.n):
             R += self.get_Christoffel(a,e,c) * self.get_Christoffel(e,b,d) 
             R -= self.get_Christoffel(a,e,d) * self.get_Christoffel(e,b,c)
-        return R
+        return self.simplify(R)
 
     def calculate_Ricci_tensor(self, a, b):
         R = 0
         for c in range(self.n):
             R += self.get_Riemann(c, a, c, b)
-        return R
+        return self.simplify(R)
 
     def calculate_Ricci(self, a, b):
         R = 0
         for c in range(self.n):
             R += self.get_Riemann(c, a, c, b)
-        return R
+        return self.simplify(R)
     
     # ------------------------------
     def get_Christoffel(self, a, b, c):
@@ -221,6 +229,35 @@ class RiemannGeometry:
 
     def get_Ricci_tensor(self, a, b):
         return self.Ricci_tensor[a,b]
+
+    # ------------------------------
+    def generate_Christoffel_formula_latex(self, a, b, c, d, align='', coord=False, summation=False, start=0):
+        if any([isinstance(i, str) for i in [a,b,c]]) and coord:
+            raise ValueError("The input index must be integer, when coord=True!")
+
+        summationSymbos = ""
+        if coord:
+            x = [sympy.latex(self.x[i]) for i in range(self.n)]
+            if summation: summationSymbos = f"\\sum_{{{d}={','.join(x)}}}"
+            return f"\\Gamma^{{{x[a]}}}_{{{x[b]}{x[c]}}} {align}= \\frac{{1}}{{2}} {summationSymbos} g^{{{x[a]}{d}}} \\left(\\partial_{{{x[b]}}}g_{{{d} {x[c]}}} + \\partial_{{{x[c]}}}g_{{{d} {x[b]}}} - \\partial_{{{d}}}g_{{{x[b]} {x[c]}}}\\right)"
+        
+        if summation: summationSymbos = f"\\sum_{{{d}={start}}}^{{{self.n+start-1}}}"
+        return f"\\Gamma^{{{a}}}_{{{b} {c}}} {align}= \\frac{{1}} {{2}} {summationSymbos} g^{{{a} {d}}} \\left(\\partial_{{{b}}}g_{{{d} {c}}} + \\partial_{{{c}}}g_{{{d} {b}}} - \\partial_{{{d}}}g_{{{b} {c}}}\\right)"
+
+
+    def generate_Riemann_formula_latex(self, a, b, c, d, e, align='', coord=False, summation=False, start=0):
+        if any([isinstance(i, str) for i in [a,b,c,d]]) and coord:
+            raise ValueError("The input index must be integer, when coord=True!")
+
+        summationSymbos = ""
+        if coord:
+            x = [sympy.latex(self.x[i]) for i in range(self.n)]
+            if summation: summationSymbos = f"\\sum_{{{d}={','.join(x)}}}"
+            return f"R^{{{x[a]}}}_{{{x[b]} {x[c]} {x[d]}}} {align}= \\partial_{{{x[c]}}}\\Gamma^{{{x[a]}}}_{{{x[b]} {x[d]}}}-\\partial_{{{x[d]}}}\\Gamma^{{{x[a]}}}_{{{x[b]} {x[c]}}} + {summationSymbos} \\Gamma^{{{x[a]}}}_{{{e} {x[c]}}}\\Gamma^{{{e}}}_{{{x[b]} {x[d]}}}- \\Gamma^{{{x[a]}}}_{{{e} {d}}}\\Gamma^{{{e}}}_{{{x[b]} {x[c]}}}"
+
+        if summation: summationSymbos = f"\\sum_{{{d}={start}}}^{{{self.n+start-1}}}"
+        return f"R^{{{a}}}_{{{b} {c} {d}}} {align}= \\partial_{{{c}}}\\Gamma^{{{a}}}_{{{b} {d}}}-\\partial_{{{d}}}\\Gamma^{{{a}}}_{{{b} {c}}} + {summationSymbos} \\Gamma^{{{a}}}_{{{e} {c}}}\\Gamma^{{{e}}}_{{{b} {d}}} - \\Gamma^{{{a}}}_{{{e} {d}}}\\Gamma^{{{e}}}_{{{b} {c}}}"
+
 
     # ------------------------------
     def x_latex(self):
@@ -319,7 +356,7 @@ class RiemannGeometry:
         output += f"R_{{ab}}&={ricci_tensor_latex},\quad R={ricci_latex}."
         output += "\\end{aligned}"
         return output
-    
+
     def __repr__(self):
         return self.string()
 

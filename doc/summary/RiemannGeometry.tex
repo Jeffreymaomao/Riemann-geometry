@@ -1,0 +1,1257 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage{pmboxdraw}
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+	
+	\usepackage{amssymb}
+	\let\mathbbalt\mathbb
+	
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+    \let\mathbb\mathbbalt
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Riemann Geometry}
+    \date{\today}
+    \author{Chang-Mao, Yang}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{a4paper, margin=1in, paperwidth=16in, paperheight=35in}
+	\usepackage{lscape}
+	
+    
+    
+
+\begin{document}	
+	
+    \maketitle
+    
+    \tableofcontents	    
+    
+
+    
+    \hypertarget{riemann-geometry}{%
+\section{Riemann Geometry}\label{riemann-geometry}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{sympy} \PY{k}{as} \PY{n+nn}{sp}
+\PY{k+kn}{from} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k+kn}{import} \PY{n}{Math}\PY{p}{,} \PY{n}{Markdown}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}}\PY{k}{reload\PYZus{}ext} autoreload
+\PY{o}{\PYZpc{}}\PY{k}{autoreload} 2
+\PY{k+kn}{from} \PY{n+nn}{riemann\PYZus{}geometry} \PY{k+kn}{import} \PY{n}{RiemannGeometry} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{RiemannGeometry}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+riemann\_geometry.core.RiemannGeometry
+\end{Verbatim}
+\end{tcolorbox}
+        
+        
+    \hypertarget{convension}{%
+\subsection{Convension}\label{convension}}
+
+\hypertarget{einstein-convension}{%
+\subsubsection{Einstein Convension}\label{einstein-convension}}
+
+Here using the Einstein summation convention, 
+\begin{quote}
+When an index variable appears twice in a single term and is not otherwise
+defined, it implies summation of that term over all the
+values of the index.
+\end{quote}
+
+\hypertarget{tensor-denotion}{%
+\subsubsection{Tensor denotion}\label{tensor-denotion}}
+
+On the manofold \(\mathcal{M}\) with dimension \(\dim\mathcal{M} = n\).
+The \textbf{\emph{metric}} \(g_{ab}\) and the \textbf{\emph{inverse of
+metric}} \(g^{ab}\) is denoted in matrix form, that is \[
+g_{ab} = \begin{pmatrix}
+ g_{11} &  g_{12} & \cdots &  g_{1n} \\ 
+ g_{21} &  g_{22} & \cdots &  g_{2n} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+ g_{n1} &  g_{n2} & \cdots &  g_{nn} \\ 
+\end{pmatrix}
+,\quad 
+g^{ab} = \begin{pmatrix}
+ g^{11} &  g^{12} & \cdots &  g^{1n} \\ 
+ g^{21} &  g^{22} & \cdots &  g^{2n} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+ g^{n1} &  g^{n2} & \cdots &  g^{nn} \\ 
+\end{pmatrix}.
+\]
+
+For the \textbf{\emph{Christoffel symbols}} \({\Gamma^{a}}_{bc}\),
+notice that it only has \(3\) indices, so here define it in the form \[
+{\Gamma^{a}}_{bcd} = 
+\begin{pmatrix}
+\begin{pmatrix}
+ {\Gamma^{1}_{11}} &  {\Gamma^{1}_{12}} & \cdots &  {\Gamma^{1}_{1n}} \\ 
+ {\Gamma^{1}_{21}} &  {\Gamma^{1}_{22}} & \cdots &  {\Gamma^{1}_{2n}} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+ {\Gamma^{1}_{n1}} &  {\Gamma^{1}_{n2}} & \cdots &  {\Gamma^{1}_{nn}} \\ 
+\end{pmatrix}
+& 
+\begin{pmatrix}
+ {\Gamma^{2}_{11}} &  {\Gamma^{2}_{12}} & \cdots &  {\Gamma^{2}_{1n}} \\ 
+ {\Gamma^{2}_{21}} &  {\Gamma^{2}_{22}} & \cdots &  {\Gamma^{2}_{2n}} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+ {\Gamma^{2}_{n1}} &  {\Gamma^{2}_{n2}} & \cdots &  {\Gamma^{2}_{nn}} \\ 
+\end{pmatrix}
+& \cdots & 
+\begin{pmatrix}
+ {\Gamma^{n}_{11}} &  {\Gamma^{n}_{12}} & \cdots &  {\Gamma^{n}_{1n}} \\ 
+ {\Gamma^{n}_{21}} &  {\Gamma^{n}_{22}} & \cdots &  {\Gamma^{n}_{2n}} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+ {\Gamma^{n}_{n1}} &  {\Gamma^{n}_{n2}} & \cdots &  {\Gamma^{n}_{nn}} \\ 
+\end{pmatrix}
+\end{pmatrix}
+\]
+
+Then the \textbf{\emph{Riemann tensor}} \({R^{a}}_{bcd}\) also denote as
+a matrix in a matrix form, \[
+{R^{a}}_{bcd} = \begin{pmatrix}
+ {R^{1}}_{1cd} & {R^{1}}_{1cd} & \cdots &  {R^{1}}_{1cd} \\ 
+ {R^{2}}_{2cd} & {R^{2}}_{2cd} & \cdots &  {R^{2}}_{2cd} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+ {R^{n}}_{ncd} & {R^{n}}_{ncd} & \cdots &  {R^{n}}_{ncd} \\ 
+\end{pmatrix}
+= \begin{pmatrix}
+\begin{pmatrix}
+{R^{1}}_{111} & {R^{1}}_{211} & \cdots & {R^{1}}_{n11} \\ 
+{R^{2}}_{111} & {R^{2}}_{211} & \cdots & {R^{2}}_{n11} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{111} & {R^{n}}_{211} & \cdots & {R^{n}}_{n11} \\ 
+\end{pmatrix} & \begin{pmatrix}
+{R^{1}}_{112} & {R^{1}}_{212} & \cdots & {R^{1}}_{n12} \\ 
+{R^{2}}_{112} & {R^{2}}_{212} & \cdots & {R^{2}}_{n12} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{112} & {R^{n}}_{212} & \cdots & {R^{n}}_{n12} \\ 
+\end{pmatrix} & \cdots & \begin{pmatrix}
+{R^{1}}_{11n} & {R^{1}}_{21n} & \cdots & {R^{1}}_{n1n} \\ 
+{R^{2}}_{11n} & {R^{2}}_{21n} & \cdots & {R^{2}}_{n1n} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{11n} & {R^{n}}_{21n} & \cdots & {R^{n}}_{n1n} \\ 
+\end{pmatrix} \\ 
+\begin{pmatrix}
+{R^{1}}_{121} & {R^{1}}_{221} & \cdots & {R^{1}}_{n21} \\ 
+{R^{2}}_{121} & {R^{2}}_{221} & \cdots & {R^{2}}_{n21} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{121} & {R^{n}}_{221} & \cdots & {R^{n}}_{n21} \\ 
+\end{pmatrix} & \begin{pmatrix}
+{R^{1}}_{122} & {R^{1}}_{222} & \cdots & {R^{1}}_{n22} \\ 
+{R^{2}}_{122} & {R^{2}}_{222} & \cdots & {R^{2}}_{n22} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{122} & {R^{n}}_{222} & \cdots & {R^{n}}_{n22} \\ 
+\end{pmatrix} & \cdots & \begin{pmatrix}
+{R^{1}}_{12n} & {R^{1}}_{22n} & \cdots & {R^{1}}_{n2n} \\ 
+{R^{2}}_{12n} & {R^{2}}_{22n} & \cdots & {R^{2}}_{n2n} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{12n} & {R^{n}}_{22n} & \cdots & {R^{n}}_{n2n} \\ 
+\end{pmatrix} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+\begin{pmatrix}
+{R^{1}}_{1n1} & {R^{1}}_{2n1} & \cdots & {R^{1}}_{nn1} \\ 
+{R^{2}}_{1n1} & {R^{2}}_{2n1} & \cdots & {R^{2}}_{nn1} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{1n1} & {R^{n}}_{2n1} & \cdots & {R^{n}}_{nn1} \\ 
+\end{pmatrix} & \begin{pmatrix}
+{R^{1}}_{1n2} & {R^{1}}_{2n2} & \cdots & {R^{1}}_{nn2} \\ 
+{R^{2}}_{1n2} & {R^{2}}_{2n2} & \cdots & {R^{2}}_{nn2} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{1n2} & {R^{n}}_{2n2} & \cdots & {R^{n}}_{nn2} \\ 
+\end{pmatrix} & \cdots & \begin{pmatrix}
+{R^{1}}_{1nn} & {R^{1}}_{2nn} & \cdots & {R^{1}}_{nnn} \\ 
+{R^{2}}_{1nn} & {R^{2}}_{2nn} & \cdots & {R^{2}}_{nnn} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+{R^{n}}_{1nn} & {R^{n}}_{2nn} & \cdots & {R^{n}}_{nnn} \\ 
+\end{pmatrix} \\ 
+\end{pmatrix}.
+\]
+
+Also, for the \textbf{\emph{Ricci tensor}} \(R_{ab}\), it will also
+denote as a matrix form (since it only has two indices), that is \[
+R_{ab} = {R^{c}}_{acb} = \begin{pmatrix}
+ R_{11} & R_{11} & \cdots &  R_{11} \\ 
+ R_{22} & R_{22} & \cdots &  R_{22} \\ 
+ \vdots & \vdots & \ddots &\vdots \\ 
+ R_{nn} & R_{nn} & \cdots &  R_{nn} \\ 
+\end{pmatrix}.
+\]
+
+Last, since the \textbf{\emph{Ricci scalar}} \(R\) is just a scalar, so
+it has no metrix definition.
+
+    \hypertarget{example-for-manifolds-in-euclidean-mathbbrn}{%
+\subsection{\texorpdfstring{Example for Manifolds in Euclidean
+\(\mathbb{R}^n\)}{Example for Manifolds in Euclidean \textbackslash mathbb\{R\}\^{}n}}\label{example-for-manifolds-in-euclidean-mathbbrn}}
+
+    \hypertarget{flat-manifold-in-mathbbr2}{%
+\subsubsection{\texorpdfstring{Flat Manifold in
+\(\mathbb{R}^2\)}{Flat Manifold in \textbackslash mathbb\{R\}\^{}2}}\label{flat-manifold-in-mathbbr2}}
+
+    \hypertarget{cartesian-coordinate}{%
+\paragraph{Cartesian coordinate}\label{cartesian-coordinate}}
+
+In \(2\)-dimensional flat space \(\mathbb{R}^2\), the line element in
+Cartesian coordinate is \[
+ds^2 = dx^2 + dy^2 +dz^2 
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x}\PY{p}{,} \PY{n}{y} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+1008.00it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+1059.97it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+6172.63it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+50231.19it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{4}{}
+    
+    $$x^{a}=\begin{pmatrix}x\\y\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 & 0\\ 0 & 1 \end{pmatrix},\quad g^{ab}=\begin{pmatrix} 1 & 0\\ 0 & 1 \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix},\quad R=0.$$
+
+    \hypertarget{polar-coordinate}{%
+\paragraph{Polar coordinate}\label{polar-coordinate}}
+
+In \(2\)-dimensional flat space \(\mathbb{R}^2\), the line element in
+polar coordinate is \[
+ds^2 = dr^2 + r^2d\theta^2
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{r}\PY{p}{,} \PY{n}{theta} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r theta}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+308.02it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+613.34it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+6355.01it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+21959.71it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{5}{}
+    
+    $$x^{a}=\begin{pmatrix}r\\\theta\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 & 0\\ 0 & r^{2} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} 1 & 0\\ 0 & \frac{1}{r^{2}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0\\ 0 & - r \end{pmatrix} & \begin{pmatrix} 0 & \frac{1}{r}\\ \frac{1}{r} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix},\quad R=0.$$
+
+    
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+    \hypertarget{flat-manifold-in-mathbbr3}{%
+\subsubsection{\texorpdfstring{Flat Manifold in
+\(\mathbb{R}^3\)}{Flat Manifold in \textbackslash mathbb\{R\}\^{}3}}\label{flat-manifold-in-mathbbr3}}
+
+    \hypertarget{cartesian-coordinate}{%
+\paragraph{Cartesian coordinate}\label{cartesian-coordinate}}
+
+In \(3\)-dimensional flat space \(\mathbb{R}^3\), the line element in
+Cartesian coordinate is \[
+ds^2 = dx^2 + dy^2 +dz^2 
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{z} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x y z}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{z}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,576.67it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,361.92it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,5007.13it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,17050.02it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{6}{}
+
+    $$x^{a}=\begin{pmatrix}x\\y\\z\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 & 0 & 0\\ 0 & 1 & 0\\ 0 & 0 & 1 \end{pmatrix},\quad g^{ab}=\begin{pmatrix} 1 & 0 & 0\\ 0 & 1 & 0\\ 0 & 0 & 1 \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix},\quad R=0.$$
+
+    
+    \hypertarget{spherical-coordinate}{%
+\paragraph{Spherical coordinate}\label{spherical-coordinate}}
+
+In \(3\)-dimensional flat space \(\mathbb{R}^3\), the line element in
+spherical coordinate is \[
+ds^2 = dr^2 + r^2d\theta^2 + r^2\sin^2\theta d\varphi^2
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3[00:00<00:00, 45.22it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3[00:00<00:00, 95.38it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,
+5094.30it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,
+45425.68it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{7}{}
+    
+    $$x^{a}=\begin{pmatrix}r\\\theta\\\varphi\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 & 0 & 0\\ 0 & r^{2} & 0\\ 0 & 0 & r^{2} \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} 1 & 0 & 0\\ 0 & \frac{1}{r^{2}} & 0\\ 0 & 0 & \frac{1}{r^{2} \sin^{2}{\left(\theta \right)}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0\\ 0 & - r & 0\\ 0 & 0 & - r \sin^{2}{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & \frac{1}{r} & 0\\ \frac{1}{r} & 0 & 0\\ 0 & 0 & - \sin{\left(\theta \right)} \cos{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & \frac{1}{r}\\ 0 & 0 & \frac{1}{\tan{\left(\theta \right)}}\\ \frac{1}{r} & \frac{1}{\tan{\left(\theta \right)}} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix},\quad R=0.$$
+
+    \hypertarget{cylindrical-coordinate}{%
+\paragraph{Cylindrical coordinate}\label{cylindrical-coordinate}}
+
+In \(3\)-dimensional flat space \(\mathbb{R}^3\), the line element in
+cylindrical coordinate is \[
+ds^2 = dr^2 + r^2d\varphi^2 + dz^2
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{r}\PY{p}{,} \PY{n}{phi}\PY{p}{,} \PY{n}{z} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r theta z}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{r}\PY{p}{,} \PY{n}{phi}\PY{p}{,} \PY{n}{z}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,369.50it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,360.67it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,3424.85it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 3/3 [00:00<00:00,41120.63it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{8}{}
+    
+    $$x^{a}=\begin{pmatrix}r\\\theta\\z\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 & 0 & 0\\ 0 & r^{2} & 0\\ 0 & 0 & 1 \end{pmatrix},\quad g^{ab}=\begin{pmatrix} 1 & 0 & 0\\ 0 & \frac{1}{r^{2}} & 0\\ 0 & 0 & 1 \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0\\ 0 & - r & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & \frac{1}{r} & 0\\ \frac{1}{r} & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0 & 0\\ 0 & 0 & 0\\ 0 & 0 & 0 \end{pmatrix},\quad R=0.$$  
+
+    \hypertarget{curved-manifolds}{%
+\subsubsection{Curved Manifolds}\label{curved-manifolds}}
+
+    \hypertarget{sphere-s2}{%
+\paragraph{\texorpdfstring{Sphere
+\(S^2\)}{Sphere S\^{}2}}\label{sphere-s2}}
+
+On a sphere, the line element is given by \[
+ds^2 = dr^2 + R^2 d\theta^2 + R^2 \sin^2\theta d\varphi,
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{R} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{n}{R}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{R}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*} \PY{p}{(}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,105.26it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2[00:00<00:00, 62.22it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,336.35it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,13421.77it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{9}{}
+    
+    $$x^{a}=\begin{pmatrix}\theta\\\varphi\end{pmatrix},\quad g_{ab}=\begin{pmatrix} R^{2} & 0\\ 0 & R^{2} \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} \frac{1}{R^{2}} & 0\\ 0 & \frac{1}{R^{2} \sin^{2}{\left(\theta \right)}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0\\ 0 & - \sin{\left(\theta \right)} \cos{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & \frac{1}{\tan{\left(\theta \right)}}\\ \frac{1}{\tan{\left(\theta \right)}} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & \sin^{2}{\left(\theta \right)}\\ - \sin^{2}{\left(\theta \right)} & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & -1\\ 1 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 1 & 0\\ 0 & \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad R=\frac{2}{R^{2}}.$$
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \hypertarget{torus-t2}{%
+\paragraph{\texorpdfstring{Torus
+\(T^2\)}{Torus T\^{}2}}\label{torus-t2}}
+
+On a sphere, the line element is given by \[
+ds^2 = \left(R + r\cos v\right)^2 du^2 + r^2 dv^2,
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{u}\PY{p}{,} \PY{n}{v} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{u v}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{R}\PY{p}{,} \PY{n}{r} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R, r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{u}\PY{p}{,} \PY{n}{v}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{p}{(}\PY{n}{R} \PY{o}{+} \PY{n}{r}\PY{o}{*}\PY{n}{sp}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{n}{v}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2[00:00<00:00, 12.76it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2[00:00<00:00, 13.72it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2[00:00<00:00, 33.62it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 2/2 [00:00<00:00,
+8971.77it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{10}{}
+    
+    $$x^{a}=\begin{pmatrix}u\\v\end{pmatrix},\quad g_{ab}=\begin{pmatrix} \left(R + r \cos{\left(v \right)}\right)^{2} & 0\\ 0 & r^{2} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} \frac{1}{R^{2} + 2 R r \cos{\left(v \right)} + r^{2} \cos^{2}{\left(v \right)}} & 0\\ 0 & \frac{1}{r^{2}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & - \frac{r \sin{\left(v \right)}}{R + r \cos{\left(v \right)}}\\ - \frac{r \sin{\left(v \right)}}{R + r \cos{\left(v \right)}} & 0 \end{pmatrix} & \begin{pmatrix} \frac{\left(R + r \cos{\left(v \right)}\right) \sin{\left(v \right)}}{r} & 0\\ 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & \frac{r \cos{\left(v \right)}}{R + r \cos{\left(v \right)}}\\ - \frac{r \cos{\left(v \right)}}{R + r \cos{\left(v \right)}} & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & - \frac{\left(R + r \cos{\left(v \right)}\right) \cos{\left(v \right)}}{r}\\ \frac{\left(R + r \cos{\left(v \right)}\right) \cos{\left(v \right)}}{r} & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0\\ 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} \frac{\left(R + r \cos{\left(v \right)}\right) \cos{\left(v \right)}}{r} & 0\\ 0 & \frac{r \cos{\left(v \right)}}{R + r \cos{\left(v \right)}} \end{pmatrix},\quad R=\frac{2 \cos{\left(v \right)}}{r \left(R + r \cos{\left(v \right)}\right)}.$$
+
+    \hypertarget{example-for-manifolds-in-spacetime-mathbbrn1}{%
+\subsection{\texorpdfstring{Example for Manifolds in Spacetime
+\(\mathbb{R}^{n+1}\)}{Example for Manifolds in Spacetime \textbackslash mathbb\{R\}\^{}\{n+1\}}}\label{example-for-manifolds-in-spacetime-mathbbrn1}}
+
+    \hypertarget{flat-manifolds-in-mathbbr31}{%
+\subsubsection{\texorpdfstring{Flat Manifolds in
+\(\mathbb{R}^{3+1}\)}{Flat Manifolds in \textbackslash mathbb\{R\}\^{}\{3+1\}}}\label{flat-manifolds-in-mathbbr31}}
+
+    \hypertarget{cartesian-coordinate}{%
+\paragraph{Cartesian coordinate}\label{cartesian-coordinate}}
+
+Minkowski metric is the metric in flat spacetime, the line element in
+Cartesian coordinate is given by \[
+ds^2 = -dt^2 + dx^2 + dy^2 + dz^2
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+\begin{quote}
+Here using Geometrized unit system \(G=c=1\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{t}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{z} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t x y z}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{p}{,} \PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{z}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,234.91it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,132.96it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,2240.85it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,45964.98it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{15}{}
+    
+    $$x^{a}=\begin{pmatrix}t\\x\\y\\z\end{pmatrix},\quad g_{ab}=\begin{pmatrix} -1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & 1 \end{pmatrix},\quad g^{ab}=\begin{pmatrix} -1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & 1 \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix},\quad R=0.$$
+
+    \hypertarget{spheical-coordinate}{%
+\paragraph{Spheical coordinate}\label{spheical-coordinate}}
+
+Minkowski metric is the metric in flat spacetime, the line element in
+spherical coordinate is given by \[
+ds^2 = -dt^2 + dr^2 + r^2 d\theta^2 + r^2 \sin^2\theta d\varphi
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+\begin{quote}
+Here using Geometrized unit system \(G=c=1\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t r theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 65.89it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 67.29it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,3629.86it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,39475.80it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{16}{}
+    
+    $$x^{a}=\begin{pmatrix}t\\r\\\theta\\\varphi\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 & 0 & 0 & 0\\ 0 & -1 & 0 & 0\\ 0 & 0 & - r^{2} & 0\\ 0 & 0 & 0 & - r^{2} \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} 1 & 0 & 0 & 0\\ 0 & -1 & 0 & 0\\ 0 & 0 & - \frac{1}{r^{2}} & 0\\ 0 & 0 & 0 & - \frac{1}{r^{2} \sin^{2}{\left(\theta \right)}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & - r & 0\\ 0 & 0 & 0 & - r \sin^{2}{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{1}{r} & 0\\ 0 & \frac{1}{r} & 0 & 0\\ 0 & 0 & 0 & - \sin{\left(\theta \right)} \cos{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{1}{r}\\ 0 & 0 & 0 & \frac{1}{\tan{\left(\theta \right)}}\\ 0 & \frac{1}{r} & \frac{1}{\tan{\left(\theta \right)}} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix},\quad R=0.$$
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+
+    \hypertarget{curved-manifolds-in-mathbbr31}{%
+\subsubsection{\texorpdfstring{Curved manifolds in
+\(\mathbb{R}^{3+1}\)}{Curved manifolds in \textbackslash mathbb\{R\}\^{}\{3+1\}}}\label{curved-manifolds-in-mathbbr31}}
+
+    \hypertarget{schwarzschild}{%
+\paragraph{Schwarzschild}\label{schwarzschild}}
+
+One of the solution for Einstein field equations, is Schwarzschild
+metric, where the line element is given by \[
+ds^2 = \left(1 - \frac{r_s}{r}\right) dt^2 - \left(1 - \frac{r_s}{r}\right)^{-1} dr^2 - r^2 d\theta^2 - r^2 \sin^2\theta d\varphi
+\] then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+\begin{quote}
+Here using Geometrized unit system \(G=c=1\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t r theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{rs} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZus{}s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rs}\PY{o}{/}\PY{n}{r}\PY{p}{)}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rs}\PY{o}{/}\PY{n}{r}\PY{p}{)}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 40.57it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 12.59it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,1763.79it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,22610.80it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{11}{}
+    
+    $$x^{a}=\begin{pmatrix}t\\r\\\theta\\\varphi\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 - \frac{r_{s}}{r} & 0 & 0 & 0\\ 0 & - \frac{1}{1 - \frac{r_{s}}{r}} & 0 & 0\\ 0 & 0 & - r^{2} & 0\\ 0 & 0 & 0 & - r^{2} \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} \frac{1}{1 - \frac{r_{s}}{r}} & 0 & 0 & 0\\ 0 & -1 + \frac{r_{s}}{r} & 0 & 0\\ 0 & 0 & - \frac{1}{r^{2}} & 0\\ 0 & 0 & 0 & - \frac{1}{r^{2} \sin^{2}{\left(\theta \right)}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & \frac{r_{s}}{2 r \left(r - r_{s}\right)} & 0 & 0\\ \frac{r_{s}}{2 r \left(r - r_{s}\right)} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} \frac{r_{s} \left(r - r_{s}\right)}{2 r^{3}} & 0 & 0 & 0\\ 0 & - \frac{r_{s}}{2 r \left(r - r_{s}\right)} & 0 & 0\\ 0 & 0 & - r + r_{s} & 0\\ 0 & 0 & 0 & \left(- r + r_{s}\right) \sin^{2}{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{1}{r} & 0\\ 0 & \frac{1}{r} & 0 & 0\\ 0 & 0 & 0 & - \sin{\left(\theta \right)} \cos{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{1}{r}\\ 0 & 0 & 0 & \frac{1}{\tan{\left(\theta \right)}}\\ 0 & \frac{1}{r} & \frac{1}{\tan{\left(\theta \right)}} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & \frac{r_{s}}{r^{2} \left(r - r_{s}\right)} & 0 & 0\\ - \frac{r_{s}}{r^{2} \left(r - r_{s}\right)} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & - \frac{r_{s}}{2 r} & 0\\ 0 & 0 & 0 & 0\\ \frac{r_{s}}{2 r} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & - \frac{r_{s} \sin^{2}{\left(\theta \right)}}{2 r}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ \frac{r_{s} \sin^{2}{\left(\theta \right)}}{2 r} & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & \frac{r_{s} \left(r - r_{s}\right)}{r^{4}} & 0 & 0\\ \frac{r_{s} \left(- r + r_{s}\right)}{r^{4}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & - \frac{r_{s}}{2 r} & 0\\ 0 & \frac{r_{s}}{2 r} & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & - \frac{r_{s} \sin^{2}{\left(\theta \right)}}{2 r}\\ 0 & 0 & 0 & 0\\ 0 & \frac{r_{s} \sin^{2}{\left(\theta \right)}}{2 r} & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & \frac{r_{s} \left(- r + r_{s}\right)}{2 r^{4}} & 0\\ 0 & 0 & 0 & 0\\ \frac{r_{s} \left(r - r_{s}\right)}{2 r^{4}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{r_{s}}{2 r^{2} \left(r - r_{s}\right)} & 0\\ 0 & - \frac{r_{s}}{2 r^{2} \left(r - r_{s}\right)} & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{r_{s} \sin^{2}{\left(\theta \right)}}{r}\\ 0 & 0 & - \frac{r_{s} \sin^{2}{\left(\theta \right)}}{r} & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & \frac{r_{s} \left(- r + r_{s}\right)}{2 r^{4}}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ \frac{r_{s} \left(r - r_{s}\right)}{2 r^{4}} & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{r_{s}}{2 r^{2} \left(r - r_{s}\right)}\\ 0 & 0 & 0 & 0\\ 0 & - \frac{r_{s}}{2 r^{2} \left(r - r_{s}\right)} & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & - \frac{r_{s}}{r}\\ 0 & 0 & \frac{r_{s}}{r} & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix},\quad R=0.$$
+
+    \hypertarget{kerr}{%
+\paragraph{Kerr}\label{kerr}}
+
+One of the solution for Einstein field equations, which corresponds to
+the gravitational field of a uncharged, rotating, spherically symmetric
+body, is Kerr metric, and the line element is given by \[
+ds^2 = -\left(1-\frac{r_{s}r}{\Sigma}\right)dt^2+\frac{\Sigma}{\Delta}dr^2+\Sigma d\theta^2+\left(r^2+a^2+\frac{r_{s}ra^2}{\Sigma}\sin^2\theta \right)\sin^2\theta \ d\phi^2-{\frac{2r_{s}ra\sin^2\theta}{\Sigma}}\,dt\,d\phi
+\] which is in \emph{Boyer-Lindquist coordinates}, then we can calculate
+the \textbf{\emph{Christoffel symbols}}, \textbf{\emph{Riemann tensor}},
+\textbf{\emph{Ricci tensor}} and \textbf{\emph{Ricci scalar}}.
+
+\begin{quote}
+Here using Geometrized unit system \(G=c=1\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t r theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{rs}\PY{p}{,} \PY{n}{J}\PY{p}{,} \PY{n}{M} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZus{}s J, M}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{a} \PY{o}{=} \PY{n}{J}\PY{o}{/}\PY{n}{M}
+\PY{n}{mu} \PY{o}{=} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+\PY{n}{Sigma} \PY{o}{=} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{sp}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+\PY{n}{Delta} \PY{o}{=} \PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{n}{rs}\PY{o}{*}\PY{n}{r}
+
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}
+    \PY{p}{[}\PY{o}{\PYZhy{}}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rs}\PY{o}{*}\PY{n}{r}\PY{o}{/}\PY{n}{Sigma}\PY{p}{)}\PY{p}{,}             \PY{l+m+mi}{0}\PY{p}{,}           \PY{l+m+mi}{0}\PY{p}{,}     \PY{o}{\PYZhy{}}\PY{n}{rs}\PY{o}{*}\PY{n}{r}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{n}{Sigma}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}                           \PY{n}{Sigma}\PY{o}{/}\PY{n}{Delta}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,}     \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}                           \PY{l+m+mi}{0}\PY{p}{,}           \PY{n}{Sigma}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
+    \PY{p}{[}\PY{o}{\PYZhy{}}\PY{n}{rs}\PY{o}{*}\PY{n}{r}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{n}{Sigma}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,}           \PY{l+m+mi}{0}\PY{p}{,}     \PY{p}{(}\PY{n}{mu}\PY{o}{+}\PY{n}{rs}\PY{o}{*}\PY{n}{r}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{n}{Sigma}\PY{p}{)}\PY{o}{*}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{]}
+\PY{p}{]}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} WARM: !!! It would take many time to calcuate!!!!!}
+\PY{c+c1}{\PYZsh{} geo = RiemannGeometry(metric, coords)}
+\PY{c+c1}{\PYZsh{} geo.calculate()}
+\PY{c+c1}{\PYZsh{} geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{reissner-nordstruxf6m}{%
+\paragraph{Reissner-Nordström}\label{reissner-nordstruxf6m}}
+
+One of the solution for Einstein field equations, which corresponds to
+the gravitational field of a charged, non-rotating, spherically
+symmetric body, is Weak-Field metric, and the line element is given by
+\[
+ds^2 = \left(1 - \frac{r_s}{r} + \frac{r_Q^2}{r^2}\right)dt^2 - \left(1 - \frac{r_s}{r} + \frac{r_Q^2}{r^2}\right) dr^2 - d\theta^2 - r^2 \sin^2\theta d\varphi,
+\] where \(\Phi\) is a function of \(r\) (usual Newtonian gravitational
+potential \(\Phi=-GM/r\)), then we can calculate the
+\textbf{\emph{Christoffel symbols}}, \textbf{\emph{Riemann tensor}},
+\textbf{\emph{Ricci tensor}} and \textbf{\emph{Ricci scalar}}.
+
+\begin{quote}
+Here using Geometrized unit system \(G=c=1\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t r theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{rs}\PY{p}{,} \PY{n}{rQ} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r\PYZus{}s r\PYZus{}Q}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rs}\PY{o}{/}\PY{n}{r} \PY{o}{+} \PY{n}{rQ}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{rs}\PY{o}{/}\PY{n}{r}\PY{o}{+} \PY{n}{rQ}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 22.81it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00,  4.55it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 59.79it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,
+11732.32it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{12}{}
+    
+    $$x^{a}=\begin{pmatrix}t\\r\\\theta\\\varphi\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 - \frac{r_{s}}{r} + \frac{r_{Q}^{2}}{r^{2}} & 0 & 0 & 0\\ 0 & - \frac{1}{1 - \frac{r_{s}}{r} + \frac{r_{Q}^{2}}{r^{2}}} & 0 & 0\\ 0 & 0 & - r^{2} & 0\\ 0 & 0 & 0 & - r^{2} \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} \frac{r^{2}}{r^{2} - r r_{s} + r_{Q}^{2}} & 0 & 0 & 0\\ 0 & \frac{- r^{2} + r r_{s} - r_{Q}^{2}}{r^{2}} & 0 & 0\\ 0 & 0 & - \frac{1}{r^{2}} & 0\\ 0 & 0 & 0 & - \frac{1}{r^{2} \sin^{2}{\left(\theta \right)}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & \frac{\frac{r r_{s}}{2} - r_{Q}^{2}}{r \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0\\ \frac{\frac{r r_{s}}{2} - r_{Q}^{2}}{r \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} \frac{\left(r r_{s} - 2 r_{Q}^{2}\right) \left(r^{2} - r r_{s} + r_{Q}^{2}\right)}{2 r^{5}} & 0 & 0 & 0\\ 0 & \frac{- \frac{r r_{s}}{2} + r_{Q}^{2}}{r \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0\\ 0 & 0 & - r + r_{s} - \frac{r_{Q}^{2}}{r} & 0\\ 0 & 0 & 0 & \frac{\left(- r^{2} + r r_{s} - r_{Q}^{2}\right) \sin^{2}{\left(\theta \right)}}{r} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{1}{r} & 0\\ 0 & \frac{1}{r} & 0 & 0\\ 0 & 0 & 0 & - \sin{\left(\theta \right)} \cos{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{1}{r}\\ 0 & 0 & 0 & \frac{1}{\tan{\left(\theta \right)}}\\ 0 & \frac{1}{r} & \frac{1}{\tan{\left(\theta \right)}} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & \frac{r r_{s} - 3 r_{Q}^{2}}{r^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0\\ \frac{- r r_{s} + 3 r_{Q}^{2}}{r^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & \frac{- \frac{r r_{s}}{2} + r_{Q}^{2}}{r^{2}} & 0\\ 0 & 0 & 0 & 0\\ \frac{\frac{r r_{s}}{2} - r_{Q}^{2}}{r^{2}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & \frac{\left(- \frac{r r_{s}}{2} + r_{Q}^{2}\right) \sin^{2}{\left(\theta \right)}}{r^{2}}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ \frac{\left(\frac{r r_{s}}{2} - r_{Q}^{2}\right) \sin^{2}{\left(\theta \right)}}{r^{2}} & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & \frac{r^{3} r_{s} - 3 r^{2} r_{Q}^{2} - r^{2} r_{s}^{2} + 4 r r_{Q}^{2} r_{s} - 3 r_{Q}^{4}}{r^{6}} & 0 & 0\\ \frac{- r^{3} r_{s} + 3 r^{2} r_{Q}^{2} + r^{2} r_{s}^{2} - 4 r r_{Q}^{2} r_{s} + 3 r_{Q}^{4}}{r^{6}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{- \frac{r r_{s}}{2} + r_{Q}^{2}}{r^{2}} & 0\\ 0 & \frac{\frac{r r_{s}}{2} - r_{Q}^{2}}{r^{2}} & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{\left(- \frac{r r_{s}}{2} + r_{Q}^{2}\right) \sin^{2}{\left(\theta \right)}}{r^{2}}\\ 0 & 0 & 0 & 0\\ 0 & \frac{\left(\frac{r r_{s}}{2} - r_{Q}^{2}\right) \sin^{2}{\left(\theta \right)}}{r^{2}} & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & - \frac{\left(r r_{s} - 2 r_{Q}^{2}\right) \left(r^{2} - r r_{s} + r_{Q}^{2}\right)}{2 r^{6}} & 0\\ 0 & 0 & 0 & 0\\ \frac{\left(r r_{s} - 2 r_{Q}^{2}\right) \left(r^{2} - r r_{s} + r_{Q}^{2}\right)}{2 r^{6}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{\frac{r r_{s}}{2} - r_{Q}^{2}}{r^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0\\ 0 & \frac{- \frac{r r_{s}}{2} + r_{Q}^{2}}{r^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{\left(r r_{s} - r_{Q}^{2}\right) \sin^{2}{\left(\theta \right)}}{r^{2}}\\ 0 & 0 & \frac{\left(- r r_{s} + r_{Q}^{2}\right) \sin^{2}{\left(\theta \right)}}{r^{2}} & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & - \frac{\left(r r_{s} - 2 r_{Q}^{2}\right) \left(r^{2} - r r_{s} + r_{Q}^{2}\right)}{2 r^{6}}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ \frac{\left(r r_{s} - 2 r_{Q}^{2}\right) \left(r^{2} - r r_{s} + r_{Q}^{2}\right)}{2 r^{6}} & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{\frac{r r_{s}}{2} - r_{Q}^{2}}{r^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)}\\ 0 & 0 & 0 & 0\\ 0 & \frac{- \frac{r r_{s}}{2} + r_{Q}^{2}}{r^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{- r r_{s} + r_{Q}^{2}}{r^{2}}\\ 0 & 0 & \frac{r r_{s} - r_{Q}^{2}}{r^{2}} & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} \frac{r_{Q}^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)}{r^{6}} & 0 & 0 & 0\\ 0 & - \frac{r_{Q}^{2}}{r^{2} \left(r^{2} - r r_{s} + r_{Q}^{2}\right)} & 0 & 0\\ 0 & 0 & \frac{r_{Q}^{2}}{r^{2}} & 0\\ 0 & 0 & 0 & \frac{r_{Q}^{2} \sin^{2}{\left(\theta \right)}}{r^{2}} \end{pmatrix},\quad R=0.$$
+
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\begin{landscape}
+    \hypertarget{weak-field}{%
+\paragraph{Weak-Field}\label{weak-field}}
+
+One of the solution for Einstein field equations in the limit of weak
+gravity, is Weak-Field metric, where the line element is given by \[
+ds^2 = \left(1 + 2\Phi^2(r)\right)dt^2 - \left(1 + 2\Phi^2(r)\right) dr^2 - \left(1 + 2\Phi^2(r)\right) d\theta^2 - \left(1 + 2\Phi^2(r)\right) r^2 \sin^2\theta d\varphi,
+\] where \(\Phi\) is a function of \(r\) (usual Newtonian gravitational
+potential \(\Phi=-GM/r\)), then we can calculate the
+\textbf{\emph{Christoffel symbols}}, \textbf{\emph{Riemann tensor}},
+\textbf{\emph{Ricci tensor}} and \textbf{\emph{Ricci scalar}}.
+
+\begin{quote}
+Here using Geometrized unit system \(G=c=1\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} coordinates }
+\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t r theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} dependent function}
+\PY{n}{Phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Function}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Phi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{(}\PY{n}{r}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} M = sp.symbols(\PYZsq{}M\PYZsq{})}
+\PY{c+c1}{\PYZsh{} Phi = \PYZhy{}M/r}
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{metrix} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{Phi}\PY{p}{)}\PY{p}{,} \PY{o}{+}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{Phi}\PY{p}{)}\PY{p}{,} \PY{o}{+}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{Phi}\PY{p}{)}\PY{o}{*}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{o}{+}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{Phi}\PY{p}{)}\PY{o}{*}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} WARM: !!! It would take many time to calcuate!!!!!}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metrix}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 13.07it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:01<00:00,  3.22it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00,  9.54it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,
+12087.33it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{25}{}
+    
+    $$x^{a}=\begin{pmatrix}t\\r\\\theta\\\varphi\end{pmatrix},\quad g_{ab}=\begin{pmatrix} - 2 \Phi{\left(r \right)} - 1 & 0 & 0 & 0\\ 0 & 1 - 2 \Phi{\left(r \right)} & 0 & 0\\ 0 & 0 & r^{2} \cdot \left(1 - 2 \Phi{\left(r \right)}\right) & 0\\ 0 & 0 & 0 & r^{2} \cdot \left(1 - 2 \Phi{\left(r \right)}\right) \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} \frac{1}{- 2 \Phi{\left(r \right)} - 1} & 0 & 0 & 0\\ 0 & \frac{1}{1 - 2 \Phi{\left(r \right)}} & 0 & 0\\ 0 & 0 & - \frac{1}{2 r^{2} \Phi{\left(r \right)} - r^{2}} & 0\\ 0 & 0 & 0 & - \frac{1}{2 r^{2} \Phi{\left(r \right)} \sin^{2}{\left(\theta \right)} - r^{2} \sin^{2}{\left(\theta \right)}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & \frac{\frac{d}{d r} \Phi{\left(r \right)}}{2 \Phi{\left(r \right)} + 1} & 0 & 0\\ \frac{\frac{d}{d r} \Phi{\left(r \right)}}{2 \Phi{\left(r \right)} + 1} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} - \frac{\frac{d}{d r} \Phi{\left(r \right)}}{2 \Phi{\left(r \right)} - 1} & 0 & 0 & 0\\ 0 & \frac{\frac{d}{d r} \Phi{\left(r \right)}}{2 \Phi{\left(r \right)} - 1} & 0 & 0\\ 0 & 0 & \frac{r \left(- r \frac{d}{d r} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} + 1\right)}{2 \Phi{\left(r \right)} - 1} & 0\\ 0 & 0 & 0 & \frac{r \left(- r \frac{d}{d r} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} + 1\right) \sin^{2}{\left(\theta \right)}}{2 \Phi{\left(r \right)} - 1} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1}{r \left(2 \Phi{\left(r \right)} - 1\right)} & 0\\ 0 & \frac{r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1}{r \left(2 \Phi{\left(r \right)} - 1\right)} & 0 & 0\\ 0 & 0 & 0 & - \sin{\left(\theta \right)} \cos{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1}{r \left(2 \Phi{\left(r \right)} - 1\right)}\\ 0 & 0 & 0 & \frac{1}{\tan{\left(\theta \right)}}\\ 0 & \frac{r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1}{r \left(2 \Phi{\left(r \right)} - 1\right)} & \frac{1}{\tan{\left(\theta \right)}} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & \frac{- 4 \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 4 \Phi{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)}}{8 \Phi^{3}{\left(r \right)} + 4 \Phi^{2}{\left(r \right)} - 2 \Phi{\left(r \right)} - 1} & 0 & 0\\ \frac{4 \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 4 \Phi{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)}}{8 \Phi^{3}{\left(r \right)} + 4 \Phi^{2}{\left(r \right)} - 2 \Phi{\left(r \right)} - 1} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & \frac{r \left(- r \frac{d}{d r} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} + 1\right) \frac{d}{d r} \Phi{\left(r \right)}}{4 \Phi^{2}{\left(r \right)} - 1} & 0\\ 0 & 0 & 0 & 0\\ \frac{r \left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right) \frac{d}{d r} \Phi{\left(r \right)}}{4 \Phi^{2}{\left(r \right)} - 1} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & \frac{r \left(- r \frac{d}{d r} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} + 1\right) \sin^{2}{\left(\theta \right)} \frac{d}{d r} \Phi{\left(r \right)}}{4 \Phi^{2}{\left(r \right)} - 1}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ \frac{r \left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right) \sin^{2}{\left(\theta \right)} \frac{d}{d r} \Phi{\left(r \right)}}{4 \Phi^{2}{\left(r \right)} - 1} & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & \frac{4 \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 4 \Phi{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)}}{8 \Phi^{3}{\left(r \right)} - 4 \Phi^{2}{\left(r \right)} - 2 \Phi{\left(r \right)} + 1} & 0 & 0\\ \frac{- 4 \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 4 \Phi{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)}}{8 \Phi^{3}{\left(r \right)} - 4 \Phi^{2}{\left(r \right)} - 2 \Phi{\left(r \right)} + 1} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{r \left(- 2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + \frac{d}{d r} \Phi{\left(r \right)}\right)}{4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1} & 0\\ 0 & \frac{r \left(2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} - \frac{d}{d r} \Phi{\left(r \right)}\right)}{4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1} & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{r \left(- 2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + \frac{d}{d r} \Phi{\left(r \right)}\right) \sin^{2}{\left(\theta \right)}}{4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1}\\ 0 & 0 & 0 & 0\\ 0 & \frac{r \left(2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} - \frac{d}{d r} \Phi{\left(r \right)}\right) \sin^{2}{\left(\theta \right)}}{4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1} & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & \frac{\left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right) \frac{d}{d r} \Phi{\left(r \right)}}{r \left(2 \Phi{\left(r \right)} - 1\right)^{2}} & 0\\ 0 & 0 & 0 & 0\\ - \frac{\left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right) \frac{d}{d r} \Phi{\left(r \right)}}{r \left(2 \Phi{\left(r \right)} - 1\right)^{2}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} - \frac{d}{d r} \Phi{\left(r \right)}}{r \left(4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1\right)} & 0\\ 0 & \frac{- 2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + \frac{d}{d r} \Phi{\left(r \right)}}{r \left(4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1\right)} & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \sin^{2}{\left(\theta \right)} - \frac{\left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right)^{2} \sin^{2}{\left(\theta \right)}}{\left(2 \Phi{\left(r \right)} - 1\right)^{2}}\\ 0 & 0 & - \sin^{2}{\left(\theta \right)} + \frac{\left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right)^{2} \sin^{2}{\left(\theta \right)}}{\left(2 \Phi{\left(r \right)} - 1\right)^{2}} & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & \frac{\left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right) \frac{d}{d r} \Phi{\left(r \right)}}{r \left(2 \Phi{\left(r \right)} - 1\right)^{2}}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ - \frac{\left(r \frac{d}{d r} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right) \frac{d}{d r} \Phi{\left(r \right)}}{r \left(2 \Phi{\left(r \right)} - 1\right)^{2}} & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} - \frac{d}{d r} \Phi{\left(r \right)}}{r \left(4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1\right)}\\ 0 & 0 & 0 & 0\\ 0 & \frac{- 2 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + \frac{d}{d r} \Phi{\left(r \right)}}{r \left(4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1\right)} & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{r \left(r \frac{d}{d r} \Phi{\left(r \right)} + 4 \Phi{\left(r \right)} - 2\right) \frac{d}{d r} \Phi{\left(r \right)}}{4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1}\\ 0 & 0 & \frac{r \left(- r \frac{d}{d r} \Phi{\left(r \right)} - 4 \Phi{\left(r \right)} + 2\right) \frac{d}{d r} \Phi{\left(r \right)}}{4 \Phi^{2}{\left(r \right)} - 4 \Phi{\left(r \right)} + 1} & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} \frac{- 4 r \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 8 \Phi^{2}{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 2 \frac{d}{d r} \Phi{\left(r \right)}}{r \left(8 \Phi^{3}{\left(r \right)} - 4 \Phi^{2}{\left(r \right)} - 2 \Phi{\left(r \right)} + 1\right)} & 0 & 0 & 0\\ 0 & \frac{- 24 r \Phi^{3}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 24 r \Phi^{2}{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - 4 r \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 12 r \Phi{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + 6 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 4 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 16 \Phi^{3}{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} - 8 \Phi^{2}{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 4 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 2 \frac{d}{d r} \Phi{\left(r \right)}}{r \left(16 \Phi^{4}{\left(r \right)} - 8 \Phi^{2}{\left(r \right)} + 1\right)} & 0 & 0\\ 0 & 0 & \frac{r \left(- 4 r \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 16 \Phi^{2}{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 4 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 2 \frac{d}{d r} \Phi{\left(r \right)}\right)}{8 \Phi^{3}{\left(r \right)} - 4 \Phi^{2}{\left(r \right)} - 2 \Phi{\left(r \right)} + 1} & 0\\ 0 & 0 & 0 & \frac{r \left(- 4 r \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 2 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 16 \Phi^{2}{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 4 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 2 \frac{d}{d r} \Phi{\left(r \right)}\right) \sin^{2}{\left(\theta \right)}}{8 \Phi^{3}{\left(r \right)} - 4 \Phi^{2}{\left(r \right)} - 2 \Phi{\left(r \right)} + 1} \end{pmatrix},$$
+$$ R=\frac{2 \cdot \left(24 r \Phi^{3}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 12 r \Phi^{2}{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} + 4 r \Phi^{2}{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 8 r \Phi{\left(r \right)} \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - 6 r \Phi{\left(r \right)} \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} - 5 r \left(\frac{d}{d r} \Phi{\left(r \right)}\right)^{2} - r \frac{d^{2}}{d r^{2}} \Phi{\left(r \right)} + 48 \Phi^{3}{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} + 8 \Phi^{2}{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} - 12 \Phi{\left(r \right)} \frac{d}{d r} \Phi{\left(r \right)} - 2 \frac{d}{d r} \Phi{\left(r \right)}\right)}{r \left(32 \Phi^{5}{\left(r \right)} - 16 \Phi^{4}{\left(r \right)} - 16 \Phi^{3}{\left(r \right)} + 8 \Phi^{2}{\left(r \right)} + 2 \Phi{\left(r \right)} - 1\right)}.$$
+\end{landscape}
+\newpage %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+    \hypertarget{friedmannlemauxeetrerobertsonwalker}{%
+\paragraph{Friedmann--Lemaître--Robertson--Walker}\label{friedmannlemauxeetrerobertsonwalker}}
+
+One of the solution for Einstein field equations, is
+Friedmann--Lemaître--Robertson--Walker metric, where the line element is
+given by \[
+ds^2 = dt^2 - \frac{a^2(t)}{1-kr^2} dr^2 - r^2 a^2(t) d\theta^2 - r^2 a^2(t) \sin^2\theta d\varphi,
+\] where \(a\) is a function of time \(a(t)\) (called scale factor),
+then we can calculate the \textbf{\emph{Christoffel symbols}},
+\textbf{\emph{Riemann tensor}}, \textbf{\emph{Ricci tensor}} and
+\textbf{\emph{Ricci scalar}}.
+
+\begin{quote}
+Here using Geometrized unit system \(G=c=1\).
+\end{quote}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} coordinates }
+\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{t r theta varphi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} constants}
+\PY{n}{k}\PY{p}{,} \PY{n}{c} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{symbols}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k c}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} dependent function}
+\PY{n}{a} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Function}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{a}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{(}\PY{n}{t}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
+\PY{n}{coords} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{p}{[}\PY{n}{t}\PY{p}{,} \PY{n}{r}\PY{p}{,} \PY{n}{theta}\PY{p}{,} \PY{n}{phi}\PY{p}{]}\PY{p}{)}
+\PY{n}{metric} \PY{o}{=} \PY{n}{sp}\PY{o}{.}\PY{n}{diag}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{k}\PY{o}{*}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{r}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{sp}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{geo} \PY{o}{=} \PY{n}{RiemannGeometry}\PY{p}{(}\PY{n}{metric}\PY{p}{,} \PY{n}{coords}\PY{p}{)}
+\PY{n}{geo}\PY{o}{.}\PY{n}{calculate}\PY{p}{(}\PY{p}{)}
+\PY{n}{geo}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Calculating {\ldots}
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Christoffel Symbols : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 31.66it/s]
+Riemann Tensor      : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00,  9.94it/s]
+Ricci Tensor        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4[00:00<00:00, 51.95it/s]
+Ricci Scalar        : 100\%|\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock\textblock| 4/4 [00:00<00:00,
+13740.55it/s]
+    \end{Verbatim}
+ 
+            
+\prompt{Out}{outcolor}{14}{}
+    
+    $$x^{a}=\begin{pmatrix}t\\r\\\theta\\\varphi\end{pmatrix},\quad g_{ab}=\begin{pmatrix} 1 & 0 & 0 & 0\\ 0 & - \frac{a^{2}{\left(t \right)}}{- k r^{2} + 1} & 0 & 0\\ 0 & 0 & - r^{2} a^{2}{\left(t \right)} & 0\\ 0 & 0 & 0 & - r^{2} a^{2}{\left(t \right)} \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad g^{ab}=\begin{pmatrix} 1 & 0 & 0 & 0\\ 0 & \frac{k r^{2} - 1}{a^{2}{\left(t \right)}} & 0 & 0\\ 0 & 0 & - \frac{1}{r^{2} a^{2}{\left(t \right)}} & 0\\ 0 & 0 & 0 & - \frac{1}{r^{2} a^{2}{\left(t \right)} \sin^{2}{\left(\theta \right)}} \end{pmatrix},$$
+$${\Gamma^{a}}_{bc}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & - \frac{a{\left(t \right)} \frac{d}{d t} a{\left(t \right)}}{k r^{2} - 1} & 0 & 0\\ 0 & 0 & r^{2} a{\left(t \right)} \frac{d}{d t} a{\left(t \right)} & 0\\ 0 & 0 & 0 & r^{2} a{\left(t \right)} \sin^{2}{\left(\theta \right)} \frac{d}{d t} a{\left(t \right)} \end{pmatrix} & \begin{pmatrix} 0 & \frac{\frac{d}{d t} a{\left(t \right)}}{a{\left(t \right)}} & 0 & 0\\ \frac{\frac{d}{d t} a{\left(t \right)}}{a{\left(t \right)}} & - \frac{k r}{k r^{2} - 1} & 0 & 0\\ 0 & 0 & k r^{3} - r & 0\\ 0 & 0 & 0 & r \left(k r^{2} - 1\right) \sin^{2}{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & \frac{\frac{d}{d t} a{\left(t \right)}}{a{\left(t \right)}} & 0\\ 0 & 0 & \frac{1}{r} & 0\\ \frac{\frac{d}{d t} a{\left(t \right)}}{a{\left(t \right)}} & \frac{1}{r} & 0 & 0\\ 0 & 0 & 0 & - \sin{\left(\theta \right)} \cos{\left(\theta \right)} \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & \frac{\frac{d}{d t} a{\left(t \right)}}{a{\left(t \right)}}\\ 0 & 0 & 0 & \frac{1}{r}\\ 0 & 0 & 0 & \frac{1}{\tan{\left(\theta \right)}}\\ \frac{\frac{d}{d t} a{\left(t \right)}}{a{\left(t \right)}} & \frac{1}{r} & \frac{1}{\tan{\left(\theta \right)}} & 0 \end{pmatrix} \end{pmatrix},$$
+$${R^{a}}_{bcd}=\begin{pmatrix} \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & - \frac{a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)}}{k r^{2} - 1} & 0 & 0\\ \frac{a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)}}{k r^{2} - 1} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & r^{2} a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)} & 0\\ 0 & 0 & 0 & 0\\ - r^{2} a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & r^{2} a{\left(t \right)} \sin^{2}{\left(\theta \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ - r^{2} a{\left(t \right)} \sin^{2}{\left(\theta \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)} & 0 & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & \frac{\frac{d^{2}}{d t^{2}} a{\left(t \right)}}{a{\left(t \right)}} & 0 & 0\\ - \frac{\frac{d^{2}}{d t^{2}} a{\left(t \right)}}{a{\left(t \right)}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & r^{2} \left(k + \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) & 0\\ 0 & r^{2} \left(- k - \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & r^{2} \left(k + \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) \sin^{2}{\left(\theta \right)}\\ 0 & 0 & 0 & 0\\ 0 & r^{2} \left(- k - \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) \sin^{2}{\left(\theta \right)} & 0 & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & \frac{\frac{d^{2}}{d t^{2}} a{\left(t \right)}}{a{\left(t \right)}} & 0\\ 0 & 0 & 0 & 0\\ - \frac{\frac{d^{2}}{d t^{2}} a{\left(t \right)}}{a{\left(t \right)}} & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & \frac{k + \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}}{k r^{2} - 1} & 0\\ 0 & \frac{- k - \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}}{k r^{2} - 1} & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & r^{2} \left(k + \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) \sin^{2}{\left(\theta \right)}\\ 0 & 0 & r^{2} \left(- k - \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) \sin^{2}{\left(\theta \right)} & 0 \end{pmatrix}\\ \begin{pmatrix} 0 & 0 & 0 & \frac{\frac{d^{2}}{d t^{2}} a{\left(t \right)}}{a{\left(t \right)}}\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ - \frac{\frac{d^{2}}{d t^{2}} a{\left(t \right)}}{a{\left(t \right)}} & 0 & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & \frac{k + \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}}{k r^{2} - 1}\\ 0 & 0 & 0 & 0\\ 0 & \frac{- k - \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}}{k r^{2} - 1} & 0 & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & r^{2} \left(- k - \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right)\\ 0 & 0 & r^{2} \left(k + \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) & 0 \end{pmatrix} & \begin{pmatrix} 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0\\ 0 & 0 & 0 & 0 \end{pmatrix} \end{pmatrix},$$
+$$R_{ab}=\begin{pmatrix} - \frac{3 \frac{d^{2}}{d t^{2}} a{\left(t \right)}}{a{\left(t \right)}} & 0 & 0 & 0\\ 0 & \frac{- 2 k - a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)} - 2 \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}}{k r^{2} - 1} & 0 & 0\\ 0 & 0 & r^{2} \cdot \left(2 k + a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)} + 2 \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) & 0\\ 0 & 0 & 0 & r^{2} \cdot \left(2 k + a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)} + 2 \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right) \sin^{2}{\left(\theta \right)} \end{pmatrix},\quad R=\frac{6 \left(- k - a{\left(t \right)} \frac{d^{2}}{d t^{2}} a{\left(t \right)} - \left(\frac{d}{d t} a{\left(t \right)}\right)^{2}\right)}{a^{2}{\left(t \right)}}.$$
+
+    
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
